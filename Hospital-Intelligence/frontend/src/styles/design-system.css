@@ -1,0 +1,83 @@
+﻿/* HospitalCompare India - Design System */
+
+:root {
+  --hc-primary: #1769aa;
+  --hc-primary-dark: #10558c;
+  --hc-teal: #119b87;
+  --hc-purple: #7564c8;
+  --hc-navy: #12354a;
+
+  --hc-bg: #f4f7fb;
+  --hc-surface: #ffffff;
+  --hc-border: #e4ebf1;
+
+  --hc-text: #193548;
+  --hc-text-muted: #718391;
+
+  --hc-success: #168568;
+  --hc-warning: #b7791f;
+  --hc-danger: #c44d55;
+
+  --hc-radius-sm: 8px;
+  --hc-radius-md: 13px;
+  --hc-radius-lg: 18px;
+
+  --hc-shadow-sm: 0 3px 14px rgba(25, 53, 72, 0.05);
+  --hc-shadow-md: 0 10px 30px rgba(25, 53, 72, 0.08);
+
+  --hc-transition: 180ms ease;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--hc-bg);
+  color: var(--hc-text);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.hc-page {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--hc-bg);
+}
+
+.hc-panel {
+  background: var(--hc-surface);
+  border: 1px solid var(--hc-border);
+  border-radius: var(--hc-radius-md);
+  box-shadow: var(--hc-shadow-sm);
+}
+
+.hc-muted {
+  color: var(--hc-text-muted);
+}
+
+.hc-section-title {
+  color: var(--hc-text);
+  font-weight: 800;
+  letter-spacing: -0.7px;
+}
+
+.hc-empty-state {
+  padding: 42px 20px;
+  text-align: center;
+  color: var(--hc-text-muted);
+  background: var(--hc-surface);
+  border: 1px dashed var(--hc-border);
+  border-radius: var(--hc-radius-md);
+}
+
+@media (max-width: 768px) {
+  :root {
+    --hc-radius-lg: 14px;
+  }
+}

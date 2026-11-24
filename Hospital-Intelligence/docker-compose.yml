@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: hospital-intelligence-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: hospital_user
+      POSTGRES_PASSWORD: hospital_password
+      POSTGRES_DB: hospital_intelligence
+    ports:
+      - "5432:5432"
+    volumes:
+      - hospital_pgdata:/var/lib/postgresql/data
+volumes:
+  hospital_pgdata:

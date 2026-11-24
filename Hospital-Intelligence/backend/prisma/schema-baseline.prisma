@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("USER")
+  createdAt    DateTime @default(now())
+}
+
+model Hospital {
+  id             String            @id @default(cuid())
+  name           String
+  city           String
+  state          String            @default("Uttar Pradesh")
+  region         String            @default("North India")
+  address        String
+  description    String
+  phone          String?
+  website        String?
+  rating         Float             @default(0)
+  reviewCount    Int               @default(0)
+  verified       Boolean           @default(false)
+  lastVerifiedAt DateTime?
+  doctors        Doctor[]
+  appointments Appointment[]
+  services       HospitalService[]
+  facilities     Facility[]
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@index([city])
+  @@index([name])
+}
+
+model Doctor {
+  id               String               @id @default(cuid())
+  name             String
+  speciality       String
+  qualification    String
+  experienceYears  Int
+  consultationFee  Int
+  hospitalId       String
+  availability     DoctorAvailability[]
+  appointments Appointment[]
+  hospital         Hospital             @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+}
+
+model HospitalService {
+  id                String   @id @default(cuid())
+  name              String
+  speciality        String
+  estimatedCostMin  Int
+  estimatedCostMax  Int
+  emergencyAvailable Boolean @default(false)
+  hospitalId        String
+  hospital          Hospital @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+
+  @@index([speciality])
+}
+
+model Facility {
+  id         String   @id @default(cuid())
+  name       String
+  hospitalId String
+  hospital   Hospital @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+}
+
+
+model DoctorAvailability {
+  id           String   @id @default(cuid())
+  dayLabel     String
+  slots        String[]
+  status       String   @default("SAMPLE")
+  doctorId     String
+  doctor       Doctor   @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+}
+
+
+
+model Patient {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  phone     String?
+  age       Int?
+  gender    String?
+  city      String?
+  appointments Appointment[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+  @@index([phone])
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+model Appointment {
+  id          String            @id @default(cuid())
+
+  patientId   String
+  doctorId    String
+  hospitalId  String
+
+  appointmentDate DateTime
+  status      AppointmentStatus @default(SCHEDULED)
+
+  reason      String?
+  notes       String?
+
+  patient     Patient  @relation(fields: [patientId], references: [id], onDelete: Restrict)
+  doctor      Doctor   @relation(fields: [doctorId], references: [id], onDelete: Restrict)
+  hospital    Hospital @relation(fields: [hospitalId], references: [id], onDelete: Restrict)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([doctorId])
+  @@index([hospitalId])
+  @@index([appointmentDate])
+  @@index([status])
+}
